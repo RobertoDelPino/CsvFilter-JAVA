@@ -29,7 +29,7 @@ public class CsvFilterTest {
     private final String EMPTYFIELD = "";
 
     @Test
-    public void shouldGivenEmptyOrNullListGiveEmptyList(){
+    public void shouldGivenEmptyOrNullListGiveEmptyList() throws Exception {
         assertThat(filter.apply(null)).isEqualTo(List.of());
     }
 
