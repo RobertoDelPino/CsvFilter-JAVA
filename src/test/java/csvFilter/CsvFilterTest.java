@@ -60,5 +60,13 @@ public class CsvFilterTest {
         assertThat(result).isEqualTo(List.of(HEADER_LINE));
     }
 
+    @Test
+    public void shouldExcludeLinesWithBothIDFieldsAreNotEmpty() throws Exception {
+        String invoiceLine = "1,02/05/2019,100,810,19,,ACER Laptop,B76430134,111";
+        List<String> result = filter.apply(List.of(HEADER_LINE, invoiceLine));
+
+        assertThat(result).isEqualTo(List.of(HEADER_LINE));
+    }
+
 
 }
