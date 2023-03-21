@@ -39,7 +39,7 @@ public class CsvFilterTest {
     }
 
     @Test
-    public void shouldThrowErrorIfListHaveNotHeaderLine() throws Exception {
+    public void shouldThrowErrorIfListHaveNotHeaderLine(){
         String invoiceLine = "1,02/05/2019,100,810,19,1,ACER Laptop,B76430134,";
         assertThatThrownBy(() -> filter.apply(List.of(invoiceLine, invoiceLine))).hasMessage("ERROR: must contain header line");
     }

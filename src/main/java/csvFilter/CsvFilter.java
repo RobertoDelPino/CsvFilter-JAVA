@@ -6,14 +6,12 @@ import java.util.Objects;
 
 public class CsvFilter {
 
-    public List<String> apply(List<String> lines) throws Exception {
-        if(lines == null || lines.isEmpty()){
-            return List.of();
-        }
+    private final String HEADER_LINE = "Num_factura, Fecha, Bruto, Neto, IVA, IGIC, Concepto, CIF_cliente, NIF_cliente";
 
-        if(lines.size() == 1){
-            throw new Exception("Invalid file");
-        }
+    public List<String> apply(List<String> lines) throws Exception {
+        if(lines == null || lines.isEmpty()) return List.of();
+        if(lines.size() == 1) throw new Exception("Invalid file");
+        if(!lines.get(0).equals(HEADER_LINE)) throw new Exception("ERROR: must contain header line");
 
         List<String> result = new ArrayList<>();
         result.add(lines.get(0));
