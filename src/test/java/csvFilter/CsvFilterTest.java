@@ -19,7 +19,7 @@ public class CsvFilterTest {
     *   1. Empty or null list give empty list
     *   2. List size is lower or equal to 1 throw error
     *   3. Given list with correct lines return same list
-    *
+    *   4.
     *
     */
 
@@ -44,6 +44,14 @@ public class CsvFilterTest {
         List<String> result = filter.apply(List.of(HEADER_LINE, invoiceLine));
 
         assertThat(result).isEqualTo(List.of(HEADER_LINE, invoiceLine));
+    }
+
+    @Test
+    public void shouldExcludeLinesWithBothTaxFieldAreNotEmpty() throws Exception {
+        String invoiceLine = "1,02/05/2019,100,810,19,1,ACER Laptop,B76430134,";
+        List<String> result = filter.apply(List.of(HEADER_LINE, invoiceLine));
+
+        assertThat(result).isEqualTo(List.of(HEADER_LINE));
     }
 
 
