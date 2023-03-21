@@ -11,18 +11,21 @@ public class CsvFilter {
     public List<String> apply(List<String> lines) throws Exception {
         if(lines == null || lines.isEmpty()) return List.of();
         if(lines.size() == 1) throw new Exception("Invalid file");
-        if(!lines.get(0).equals(HEADER_LINE)) throw new Exception("ERROR: must contain header line");
+        if(!lines.get(0).equals(HEADER_LINE))throw new Exception("ERROR: must contain header line");
 
         List<String> result = new ArrayList<>();
         result.add(lines.get(0));
-
+        String invoiceLine = lines.get(1);
         int indexIVA = 4;
         int indexIGIC = 5;
+        int indexCIF = 7;
+        int indexNIF = 8;
+        String[] invoiceLineSplit = invoiceLine.split(",");
 
-        String[] lineSplit = lines.get(1).split(",");
-
-        if(lineSplit[indexIVA].equals("") || lineSplit[indexIGIC].equals("")){
-            result.add(lines.get(1));
+        if((invoiceLineSplit[indexIVA].equals("") || invoiceLineSplit[indexIGIC].equals(""))
+                && (invoiceLineSplit[indexCIF].equals("") || invoiceLineSplit[indexNIF].equals(""))
+        ){
+            result.add(invoiceLine);
         }
 
         return result;
