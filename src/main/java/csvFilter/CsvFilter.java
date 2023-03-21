@@ -3,7 +3,8 @@ package csvFilter;
 import java.util.List;
 
 public class CsvFilter {
-    public String apply(List<String> lines){
-        return "";
+    public List<String> apply(List<String> lines){
+
+        return List.of();
     }
 }
