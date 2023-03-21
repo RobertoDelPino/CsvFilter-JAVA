@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Objects;
 
 public class CsvFilter {
+
     public List<String> apply(List<String> lines) throws Exception {
         if(lines == null || lines.isEmpty()){
             return List.of();
