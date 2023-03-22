@@ -23,7 +23,7 @@ public class CsvFilter {
         String[] invoiceLineSplit = invoiceLine.split(",");
 
         if((invoiceLineSplit[indexIVA].equals("") || invoiceLineSplit[indexIGIC].equals(""))
-                && (invoiceLineSplit[indexCIF].equals("") || invoiceLineSplit[indexNIF].equals(""))
+                && (invoiceLineSplit[indexCIF].isBlank() || invoiceLineSplit[indexNIF].isBlank())
         ){
             result.add(invoiceLine);
         }

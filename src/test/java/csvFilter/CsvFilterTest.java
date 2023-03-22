@@ -46,7 +46,7 @@ public class CsvFilterTest {
 
     @Test
     public void shouldGiveSameLineIfListContainCorrectLines() throws Exception {
-        String invoiceLine = "1,02/05/2019,100,810,19,,ACER Laptop,B76430134,";
+        String invoiceLine = "1,02/05/2019,100,810,19,,ACER Laptop,B76430134, ";
         List<String> result = filter.apply(List.of(HEADER_LINE, invoiceLine));
 
         assertThat(result).isEqualTo(List.of(HEADER_LINE, invoiceLine));
@@ -68,5 +68,11 @@ public class CsvFilterTest {
         assertThat(result).isEqualTo(List.of(HEADER_LINE));
     }
 
+    @Test
+    public void shouldExcludeLinesWithEqualInvoiceNumber() throws Exception {
+        String invoiceLine = "1,02/05/2019,100,810,19,,ACER Laptop,B76430134, ";
+        List<String> result = filter.apply(List.of(HEADER_LINE, invoiceLine, invoiceLine));
 
+        assertThat(result).isEqualTo(List.of(HEADER_LINE));
+    }
 }
