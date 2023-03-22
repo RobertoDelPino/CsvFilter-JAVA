@@ -3,11 +3,15 @@ package csvFilter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
 
 public class CsvFilter {
 
     private final String HEADER_LINE = "Num_factura, Fecha, Bruto, Neto, IVA, IGIC, Concepto, CIF_cliente, NIF_cliente";
+
+    private final int INDEX_IVA = 4;
+    private final int INDEX_IGIC = 5;
+    private final int INDEX_CIF = 7;
+    private final int INDEX_NIF = 8;
 
     public List<String> apply(List<String> lines) throws Exception {
         if(lines == null || lines.isEmpty()) return List.of();
@@ -22,16 +26,12 @@ public class CsvFilter {
 
         for (int index = 1; index < lines.size(); index++) {
             String invoiceLine = lines.get(index);
-            int indexIVA = 4;
-            int indexIGIC = 5;
-            int indexCIF = 7;
-            int indexNIF = 8;
             String[] invoiceLineSplit = invoiceLine.split(",");
 
-            if((invoiceLineSplit[indexIVA].equals("") || invoiceLineSplit[indexIGIC].equals(""))
-                    && !(invoiceLineSplit[indexIVA].equals("") && invoiceLineSplit[indexIGIC].equals(""))
-                    && (invoiceLineSplit[indexCIF].isBlank() || invoiceLineSplit[indexNIF].isBlank())
-                    && !(invoiceLineSplit[indexCIF].isBlank() && invoiceLineSplit[indexNIF].isBlank())
+            if((invoiceLineSplit[INDEX_IVA].equals("") || invoiceLineSplit[INDEX_IGIC].equals(""))
+                    && !(invoiceLineSplit[INDEX_IVA].equals("") && invoiceLineSplit[INDEX_IGIC].equals(""))
+                    && (invoiceLineSplit[INDEX_CIF].isBlank() || invoiceLineSplit[INDEX_NIF].isBlank())
+                    && !(invoiceLineSplit[INDEX_CIF].isBlank() && invoiceLineSplit[INDEX_NIF].isBlank())
             ){
                 if(!checkEqualInvoiceNumber(invoiceLinesList, invoiceLineSplit[0], index - 1)){
                     if(checkIncorrectNetValue(Arrays.stream(invoiceLineSplit).toList())){
@@ -54,19 +54,17 @@ public class CsvFilter {
     }
 
     private boolean checkIncorrectNetValue(List<String> invoiceLineSplit){
-        int indexIVA = 4;
-        int indexIGIC = 5;
         int indexGrossValue = 2;
         int indexNetValue = 3;
 
         float grossValue = Float.parseFloat(invoiceLineSplit.get(indexGrossValue));
         float netValue = Float.parseFloat(invoiceLineSplit.get(indexNetValue));
         float taxField;
-        if(!invoiceLineSplit.get(indexIVA).equals("")){
-            taxField = Float.parseFloat(invoiceLineSplit.get(indexIVA));
+        if(!invoiceLineSplit.get(INDEX_IVA).equals("")){
+            taxField = Float.parseFloat(invoiceLineSplit.get(INDEX_IVA));
         }
         else{
-            taxField = Float.parseFloat(invoiceLineSplit.get(indexIGIC));
+            taxField = Float.parseFloat(invoiceLineSplit.get(INDEX_IGIC));
         }
         return (grossValue - (grossValue * (taxField / 100))) == netValue;
     }
