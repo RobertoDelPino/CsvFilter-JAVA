@@ -28,7 +28,9 @@ public class CsvFilter {
             String[] invoiceLineSplit = invoiceLine.split(",");
 
             if((invoiceLineSplit[indexIVA].equals("") || invoiceLineSplit[indexIGIC].equals(""))
+                    && !(invoiceLineSplit[indexIVA].equals("") && invoiceLineSplit[indexIGIC].equals(""))
                     && (invoiceLineSplit[indexCIF].isBlank() || invoiceLineSplit[indexNIF].isBlank())
+                    && !(invoiceLineSplit[indexCIF].isBlank() && invoiceLineSplit[indexNIF].isBlank())
             ){
                 if(!checkEqualInvoiceNumber(invoiceLinesList, invoiceLineSplit[0], index - 1)){
                     result.add(invoiceLine);
