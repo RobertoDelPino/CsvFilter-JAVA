@@ -15,19 +15,36 @@ public class CsvFilter {
 
         List<String> result = new ArrayList<>();
         result.add(lines.get(0));
-        String invoiceLine = lines.get(1);
-        int indexIVA = 4;
-        int indexIGIC = 5;
-        int indexCIF = 7;
-        int indexNIF = 8;
-        String[] invoiceLineSplit = invoiceLine.split(",");
 
-        if((invoiceLineSplit[indexIVA].equals("") || invoiceLineSplit[indexIGIC].equals(""))
-                && (invoiceLineSplit[indexCIF].isBlank() || invoiceLineSplit[indexNIF].isBlank())
-        ){
-            result.add(invoiceLine);
+        List<String> invoiceLinesList = new ArrayList<>(lines) ;
+        invoiceLinesList.remove(0);
+
+        for (int index = 1; index < lines.size(); index++) {
+            String invoiceLine = lines.get(index);
+            int indexIVA = 4;
+            int indexIGIC = 5;
+            int indexCIF = 7;
+            int indexNIF = 8;
+            String[] invoiceLineSplit = invoiceLine.split(",");
+
+            if((invoiceLineSplit[indexIVA].equals("") || invoiceLineSplit[indexIGIC].equals(""))
+                    && (invoiceLineSplit[indexCIF].isBlank() || invoiceLineSplit[indexNIF].isBlank())
+            ){
+                if(!checkEqualInvoiceNumber(invoiceLinesList, invoiceLineSplit[0], index - 1)){
+                    result.add(invoiceLine);
+                }
+            }
         }
 
         return result;
+    }
+
+    private boolean checkEqualInvoiceNumber(List<String> invoicelinesList, String invoiceNumber, int indexInvoiceLinesList){
+        for (int index = 0; index < invoicelinesList.size(); index++) {
+            if(invoicelinesList.get(index).split(",")[0].equals(invoiceNumber) && indexInvoiceLinesList != index){
+                return true;
+            }
+        }
+        return false;
     }
 }
