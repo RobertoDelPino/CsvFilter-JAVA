@@ -1,6 +1,7 @@
 package csvFilter;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -33,7 +34,9 @@ public class CsvFilter {
                     && !(invoiceLineSplit[indexCIF].isBlank() && invoiceLineSplit[indexNIF].isBlank())
             ){
                 if(!checkEqualInvoiceNumber(invoiceLinesList, invoiceLineSplit[0], index - 1)){
-                    result.add(invoiceLine);
+                    if(checkIncorrectNetValue(Arrays.stream(invoiceLineSplit).toList())){
+                        result.add(invoiceLine);
+                    }
                 }
             }
         }
@@ -48,5 +51,23 @@ public class CsvFilter {
             }
         }
         return false;
+    }
+
+    private boolean checkIncorrectNetValue(List<String> invoiceLineSplit){
+        int indexIVA = 4;
+        int indexIGIC = 5;
+        int indexGrossValue = 2;
+        int indexNetValue = 3;
+
+        float grossValue = Float.parseFloat(invoiceLineSplit.get(indexGrossValue));
+        float netValue = Float.parseFloat(invoiceLineSplit.get(indexNetValue));
+        float taxField;
+        if(!invoiceLineSplit.get(indexIVA).equals("")){
+            taxField = Float.parseFloat(invoiceLineSplit.get(indexIVA));
+        }
+        else{
+            taxField = Float.parseFloat(invoiceLineSplit.get(indexIGIC));
+        }
+        return (grossValue - (grossValue * (taxField / 100))) == netValue;
     }
 }
