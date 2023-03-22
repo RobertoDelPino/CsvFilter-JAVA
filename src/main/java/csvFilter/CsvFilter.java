@@ -7,7 +7,6 @@ import java.util.List;
 public class CsvFilter {
 
     private final String HEADER_LINE = "Num_factura, Fecha, Bruto, Neto, IVA, IGIC, Concepto, CIF_cliente, NIF_cliente";
-
     private final int INDEX_IVA = 4;
     private final int INDEX_IGIC = 5;
     private final int INDEX_CIF = 7;
@@ -28,11 +27,12 @@ public class CsvFilter {
             String invoiceLine = lines.get(index);
             String[] invoiceLineSplit = invoiceLine.split(",");
 
-            if((invoiceLineSplit[INDEX_IVA].equals("") || invoiceLineSplit[INDEX_IGIC].equals(""))
-                    && !(invoiceLineSplit[INDEX_IVA].equals("") && invoiceLineSplit[INDEX_IGIC].equals(""))
-                    && (invoiceLineSplit[INDEX_CIF].isBlank() || invoiceLineSplit[INDEX_NIF].isBlank())
-                    && !(invoiceLineSplit[INDEX_CIF].isBlank() && invoiceLineSplit[INDEX_NIF].isBlank())
-            ){
+            boolean someTaxFieldIsEmpty = invoiceLineSplit[INDEX_IVA].equals("") || invoiceLineSplit[INDEX_IGIC].equals("");
+            boolean taxFieldsAreEmpty = !(invoiceLineSplit[INDEX_IVA].equals("") && invoiceLineSplit[INDEX_IGIC].equals(""));
+            boolean idFieldsAreEmpty = !(invoiceLineSplit[INDEX_CIF].isBlank() && invoiceLineSplit[INDEX_NIF].isBlank());
+            boolean someIdFieldIsEmpty = invoiceLineSplit[INDEX_CIF].isBlank() || invoiceLineSplit[INDEX_NIF].isBlank();
+
+            if(someTaxFieldIsEmpty && taxFieldsAreEmpty && someIdFieldIsEmpty && idFieldsAreEmpty){
                 if(!checkEqualInvoiceNumber(invoiceLinesList, invoiceLineSplit[0], index - 1)){
                     if(checkIncorrectNetValue(Arrays.stream(invoiceLineSplit).toList())){
                         result.add(invoiceLine);
