@@ -75,4 +75,13 @@ public class CsvFilterTest {
 
         assertThat(result).isEqualTo(List.of(HEADER_LINE));
     }
+
+    // Un fichero con una sola factura donde el neto está mal calculado, debería ser eliminada
+    @Test
+    public void shouldExcludeInvoiceLinesWithIncorrectNetValue() throws Exception {
+        String invoiceLine = "1,02/05/2019,100,810,19,,ACER Laptop,B76430134, ";
+        List<String> result = filter.apply(List.of(HEADER_LINE, invoiceLine));
+
+        assertThat(result).isEqualTo(List.of(HEADER_LINE));
+    }
 }
