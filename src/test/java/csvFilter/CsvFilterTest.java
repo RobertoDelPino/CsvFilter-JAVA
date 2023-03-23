@@ -54,7 +54,7 @@ public class CsvFilterTest {
 
     @Test
     public void shouldExcludeLinesWithBothTaxFieldAreNotEmpty() throws Exception {
-        String invoiceLine = "1,02/05/2019,100,81,19,1,ACER Laptop,B76430134,";
+        String invoiceLine = "1,02/05/2019,100,81,19,1,ACER Laptop,B76430134, ";
         List<String> result = filter.apply(List.of(HEADER_LINE, invoiceLine));
 
         assertThat(result).isEqualTo(List.of(HEADER_LINE));
@@ -71,9 +71,10 @@ public class CsvFilterTest {
     @Test
     public void shouldExcludeLinesWithEqualInvoiceNumber() throws Exception {
         String invoiceLine = "1,02/05/2019,100,81,19,,ACER Laptop,B76430134, ";
-        List<String> result = filter.apply(List.of(HEADER_LINE, invoiceLine, invoiceLine));
+        String invoiceLine2 = "2,02/05/2019,100,81,19,,ACER Laptop,B76430134, ";
+        List<String> result = filter.apply(List.of(HEADER_LINE, invoiceLine, invoiceLine2, invoiceLine));
 
-        assertThat(result).isEqualTo(List.of(HEADER_LINE));
+        assertThat(result).isEqualTo(List.of(HEADER_LINE, invoiceLine2));
     }
 
     @Test

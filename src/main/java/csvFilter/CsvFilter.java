@@ -26,13 +26,8 @@ public class CsvFilter {
         for (int index = 1; index < lines.size(); index++) {
             String invoiceLine = lines.get(index);
             String[] invoiceLineSplit = invoiceLine.split(",");
-
-            boolean someTaxFieldIsEmpty = invoiceLineSplit[INDEX_IVA].equals("") || invoiceLineSplit[INDEX_IGIC].equals("");
-            boolean taxFieldsAreEmpty = !(invoiceLineSplit[INDEX_IVA].equals("") && invoiceLineSplit[INDEX_IGIC].equals(""));
-            boolean idFieldsAreEmpty = !(invoiceLineSplit[INDEX_CIF].isBlank() && invoiceLineSplit[INDEX_NIF].isBlank());
-            boolean someIdFieldIsEmpty = invoiceLineSplit[INDEX_CIF].isBlank() || invoiceLineSplit[INDEX_NIF].isBlank();
-
-            if(someTaxFieldIsEmpty && taxFieldsAreEmpty && someIdFieldIsEmpty && idFieldsAreEmpty){
+            // Hacer una comprobación a la vez, no todas
+            if(checkIdAndTaxFields(invoiceLineSplit)){
                 if(!checkEqualInvoiceNumber(invoiceLinesList, invoiceLineSplit[0], index - 1)){
                     if(checkIncorrectNetValue(Arrays.stream(invoiceLineSplit).toList())){
                         result.add(invoiceLine);
@@ -42,6 +37,34 @@ public class CsvFilter {
         }
 
         return result;
+    }
+
+    private boolean checkIdAndTaxFields(String[] invoiceLineSplit){
+        if(checkForEmptiesIdFields(invoiceLineSplit)){
+            if(checkForSomeEmptyIdFields(invoiceLineSplit))
+                if(checkForTaxFieldsAreEmpties(invoiceLineSplit)){
+                    if(!checkForSomeEmptyTaxFields(invoiceLineSplit)){
+                        return true;
+                    }
+                }
+            }
+        return false;
+    }
+
+
+    private boolean checkForSomeEmptyTaxFields(String[] invoiceLineSplit){
+        return invoiceLineSplit[INDEX_IVA].equals("") || invoiceLineSplit[INDEX_IGIC].equals("");
+    }
+
+    private boolean checkForTaxFieldsAreEmpties(String[] invoiceLineSplit){
+        return !(invoiceLineSplit[INDEX_IVA].equals("") && invoiceLineSplit[INDEX_IGIC].equals(""));
+    }
+
+    private boolean checkForEmptiesIdFields(String[] invoiceLineSplit){
+        return !(invoiceLineSplit[INDEX_CIF].isBlank() && invoiceLineSplit[INDEX_NIF].isBlank());
+    }
+    private boolean checkForSomeEmptyIdFields(String[] invoiceLineSplit){
+        return invoiceLineSplit[INDEX_CIF].isBlank() || invoiceLineSplit[INDEX_NIF].isBlank();
     }
 
     private boolean checkEqualInvoiceNumber(List<String> invoicelinesList, String invoiceNumber, int indexInvoiceLinesList){
