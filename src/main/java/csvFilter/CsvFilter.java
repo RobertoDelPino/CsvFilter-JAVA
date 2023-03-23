@@ -43,7 +43,7 @@ public class CsvFilter {
         if(checkForEmptiesIdFields(invoiceLineSplit)){
             if(checkForSomeEmptyIdFields(invoiceLineSplit))
                 if(checkForTaxFieldsAreEmpties(invoiceLineSplit)){
-                    if(!checkForSomeEmptyTaxFields(invoiceLineSplit)){
+                    if(checkForSomeEmptyTaxFields(invoiceLineSplit)){
                         return true;
                     }
                 }
