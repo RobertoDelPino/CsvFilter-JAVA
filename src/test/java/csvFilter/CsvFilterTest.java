@@ -34,12 +34,12 @@ public class CsvFilterTest {
     }
 
     @Test
-    public void shouldThrowErrorIfListLengthIs1(){
+    public void shouldThrowErrorIfListDoesntContainInvoices(){
         assertThatThrownBy(() -> filter.apply(List.of(HEADER_LINE))).hasMessage("Invalid file");
     }
 
     @Test
-    public void shouldThrowErrorIfListHaveNotHeaderLine(){
+    public void shouldThrowErrorIfListDoesntContainHeaderLine(){
         String invoiceLine = "1,02/05/2019,100,81,19,1,ACER Laptop,B76430134,";
         assertThatThrownBy(() -> filter.apply(List.of(invoiceLine, invoiceLine))).hasMessage("ERROR: must contain header line");
     }
@@ -53,7 +53,7 @@ public class CsvFilterTest {
     }
 
     @Test
-    public void shouldExcludeLinesWithBothTaxFieldAreNotEmpty() throws Exception {
+    public void shouldExcludeLinesWithBothTaxFieldNotEmpty() throws Exception {
         String invoiceLine = "1,02/05/2019,100,81,19,1,ACER Laptop,B76430134, ";
         List<String> result = filter.apply(List.of(HEADER_LINE, invoiceLine));
 
@@ -61,7 +61,7 @@ public class CsvFilterTest {
     }
 
     @Test
-    public void shouldExcludeLinesWithBothIDFieldsAreNotEmpty() throws Exception {
+    public void shouldExcludeLinesWithBothIDFieldsNotEmpty() throws Exception {
         String invoiceLine = "1,02/05/2019,100,81,19,,ACER Laptop,B76430134,111";
         List<String> result = filter.apply(List.of(HEADER_LINE, invoiceLine));
 
